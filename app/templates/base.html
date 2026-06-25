@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SignGuard AI - Signature Verification System{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Animated Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Professional Navigation -->
+    <nav class="navbar glass-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>SignGuard<span class="ai-badge">AI</span></span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}" class="nav-link {% block home_active %}{% endblock %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}" class="nav-link {% block dashboard_active %}{% endblock %}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="{{ url_for('model_details') }}" class="nav-link"><i class="fas fa-brain"></i> Model Details</a></li>
+                    <li><a href="{{ url_for('accuracy') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Accuracy</a></li>
+                    <li><a href="{{ url_for('education') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Education</a></li>
+                    <li><a href="{{ url_for('about') }}" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer glass-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SignGuard AI</span>
+                </div>
+                <p>Advanced signature verification using Deep Learning and Grad-CAM visualization technology.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-medium"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Technology</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Reference</a></li>
+                    <li><a href="#">Research Paper</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 SignGuard AI. All rights reserved. Powered by CNN & Grad-CAM.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
+    <script type="module" src="{{ url_for('static', filename='js/three-animation.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.AOS) {
+                AOS.init({
+                    duration: 700,
+                    easing: 'ease-out-cubic',
+                    once: true,
+                    offset: 40
+                });
+            } else {
+                document.querySelectorAll('[data-aos]').forEach(function (el) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                });
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

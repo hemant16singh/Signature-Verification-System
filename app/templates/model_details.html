@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}CNN Model Architecture - SignGuard AI{% endblock %}
+
+{% block content %}
+<div class="model-page">
+    <div class="page-header" data-aos="fade-down">
+        <h1>{{ model_info.name }} <span class="gradient-text">Architecture</span></h1>
+        <p>Deep learning model structure for signature verification</p>
+    </div>
+    
+    <div class="model-container glass-card" data-aos="fade-up">
+        <div class="model-visualization">
+            <!-- You can add a diagram or visualization here -->
+            <div class="model-layers">
+                {% for layer in model_info.architecture %}
+                    {% set layer_name = layer.name | lower %}
+                    {% if layer_name.startswith('input') %}
+                        <div class="layer-input">{{ layer.name }}{% if layer.shape %} ({{ layer.shape }}){% endif %}</div>
+                    {% elif layer_name.startswith('conv') %}
+                        <div class="layer-conv">{{ layer.name }}{% if layer.filters %} ({{ layer.filters }} filters{% if layer.kernel %}, {{ layer.kernel }}{% endif %}){% endif %}</div>
+                    {% elif layer_name.startswith('maxpool') %}
+                        <div class="layer-pool">{{ layer.name }}{% if layer.pool_size %} ({{ layer.pool_size }}){% endif %}</div>
+                    {% elif layer_name == 'flatten' %}
+                        <div class="layer-flatten">{{ layer.name }}</div>
+                    {% elif layer_name == 'dropout' %}
+                        <div class="layer-dropout">{{ layer.name }}{% if layer.rate is defined %} ({{ layer.rate }}){% endif %}</div>
+                    {% elif layer_name == 'output' %}
+                        <div class="layer-output">{{ layer.name }}{% if layer.units %} ({{ layer.units }}){% endif %}{% if layer.activation %} - {{ layer.activation }}{% endif %}</div>
+                    {% else %}
+                        <div class="layer-dense">{{ layer.name }}{% if layer.units %} ({{ layer.units }}){% endif %}{% if layer.activation %} - {{ layer.activation }}{% endif %}</div>
+                    {% endif %}
+                    {% if not loop.last %}
+                        <div class="layer-arrow"><i class="fas fa-arrow-down"></i></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="model-details">
+            <h3>Model Specifications</h3>
+            <table class="specs-table">
+                <tr>
+                    <td>Total Parameters</td>
+                    <td>{{ "{:,}".format(model_info.total_params) }}</td>
+                </tr>
+                <tr>
+                    <td>Trainable Parameters</td>
+                    <td>{{ "{:,}".format(model_info.trainable_params) }}</td>
+                </tr>
+                <tr>
+                    <td>Layers</td>
+                    <td>{{ model_info.layers }}</td>
+                </tr>
+                <tr>
+                    <td>Input Shape</td>
+                    <td>{{ model_info.input_shape }}</td>
+                </tr>
+                <tr>
+                    <td>Activation Functions</td>
+                    <td>{{ model_info.activation }}</td>
+                </tr>
+                <tr>
+                    <td>Loss Function</td>
+                    <td>{{ model_info.loss_function }}</td>
+                </tr>
+                <tr>
+                    <td>Optimizer</td>
+                    <td>{{ model_info.optimizer }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.model-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.model-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.model-layers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.layer-input, .layer-conv, .layer-pool, .layer-flatten, .layer-dense, .layer-dropout, .layer-output {
+    padding: 1rem 2rem;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+}
+
+.layer-conv { background: rgba(59,130,246,0.2); }
+.layer-pool { background: rgba(139,92,246,0.2); }
+.layer-dense { background: rgba(34,197,94,0.2); }
+.layer-output { background: rgba(239,68,68,0.2); }
+
+.layer-arrow {
+    color: var(--accent-primary);
+    font-size: 1.2rem;
+}
+
+.specs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.specs-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.specs-table td:first-child {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.specs-table td:last-child {
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .model-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

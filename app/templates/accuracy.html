@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Model Accuracy - SignGuard AI{% endblock %}
+
+{% block content %}
+<div class="accuracy-page">
+    <div class="page-header" data-aos="fade-down">
+        <h1>Model <span class="gradient-text">Performance</span></h1>
+        <p>Detailed accuracy metrics and validation results</p>
+    </div>
+    
+    <div class="metrics-grid" data-aos="fade-up">
+        <div class="metric-card glass-card">
+            <h3>Training Accuracy</h3>
+            <div class="metric-value">{{ '%.1f'|format(accuracy.training[-1]) }}%</div>
+            <div class="progress-bar"><div style="width: {{ accuracy.training[-1] }}%"></div></div>
+        </div>
+        
+        <div class="metric-card glass-card">
+            <h3>Validation Accuracy</h3>
+            <div class="metric-value">{{ '%.1f'|format(accuracy.validation[-1]) }}%</div>
+            <div class="progress-bar"><div style="width: {{ accuracy.validation[-1] }}%"></div></div>
+        </div>
+        
+        <div class="metric-card glass-card">
+            <h3>Test Accuracy</h3>
+            <div class="metric-value">{{ '%.1f'|format(accuracy.test) }}%</div>
+            <div class="progress-bar"><div style="width: {{ accuracy.test }}%"></div></div>
+        </div>
+        
+        <div class="metric-card glass-card">
+            <h3>Precision</h3>
+            <div class="metric-value">{{ '%.1f'|format(accuracy.precision) }}%</div>
+            <div class="progress-bar"><div style="width: {{ accuracy.precision }}%"></div></div>
+        </div>
+    </div>
+    
+    <div class="charts-container glass-card" data-aos="fade-up">
+        <h2>Training History</h2>
+        <canvas id="trainingChart"></canvas>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const trainingData = {{ accuracy.training | tojson }};
+    const validationData = {{ accuracy.validation | tojson }};
+    const epochLabels = trainingData.map((_, idx) => `Epoch ${idx + 1}`);
+
+    const ctx = document.getElementById('trainingChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: epochLabels,
+            datasets: [
+                {
+                    label: 'Training Accuracy',
+                    data: trainingData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59,130,246,0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: 'Validation Accuracy',
+                    data: validationData,
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34,197,94,0.1)',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#fff' }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: { color: 'rgba(255,255,255,0.1)' },
+                    ticks: { color: '#fff' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#fff' }
+                }
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.accuracy-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    padding: 2rem;
+    text-align: center;
+}
+
+.metric-card h3 {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar div {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #6eb0ff);
+    border-radius: 4px;
+}
+
+.charts-container {
+    padding: 2rem;
+    height: 500px;
+}
+
+.charts-container h2 {
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

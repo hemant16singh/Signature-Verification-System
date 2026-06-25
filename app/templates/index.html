@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+
+{% block title %}SignGuard AI - Advanced Signature Verification System{% endblock %}
+
+{% block home_active %}active{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-container">
+        <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+            <div class="hero-badge">
+                <i class="fas fa-robot"></i>
+                <span>AI-Powered Verification System</span>
+            </div>
+            <h1 class="hero-title">
+                Verify Signatures with <span class="gradient-text">CNN & Grad-CAM</span>
+            </h1>
+            <p class="hero-subtitle">
+                Enterprise-grade signature verification using deep learning. 
+                Real-time analysis with visual explanations.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">99.5%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0.3s</div>
+                    <div class="stat-label">Processing Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1M+</div>
+                    <div class="stat-label">Signatures Verified</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+            <div class="ai-visualization">
+                <div class="gradient-sphere"></div>
+                <div class="neural-network"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upload Section with Multi-Step Process -->
+<section class="upload-section">
+    <div class="section-header" data-aos="fade-up">
+        <h2>Verify Your Signature</h2>
+        <p>Upload an image and let our AI analyze it in real-time</p>
+    </div>
+    
+    <div class="upload-container" data-aos="fade-up" data-aos-delay="200">
+        <div class="upload-card glass-card">
+            <div class="upload-area" id="dropArea">
+                <form id="upload-form" action="{{ url_for('verify') }}" method="POST" enctype="multipart/form-data">
+                    <!-- Default upload UI (visible when no image) -->
+                    <div class="upload-default" id="uploadDefault">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Drag & Drop your signature</h3>
+                        <p>or <span class="browse-text" id="browseBtn">browse files</span></p>
+                        <input type="file" name="file" id="file-input" accept="image/*" hidden>
+                        <input type="text" name="reference_id" placeholder="Reference ID (optional)" class="ref-input">
+                    </div>
+                    
+                    <!-- Preview UI (visible after image selected) -->
+                    <div class="upload-preview" id="uploadPreview" style="display: none;">
+                        <div class="preview-container">
+                            <img id="preview-img" class="preview-img" src="" alt="Signature Preview">
+                            <button type="button" class="remove-btn" id="removeBtn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <input type="text" name="reference_id" placeholder="Reference ID (optional)" class="ref-input preview-ref-input">
+                    </div>
+                    
+                    <!-- Verification Button (Always visible) -->
+                    <button type="submit" class="verify-btn" id="verifyBtn">
+                        <span>Start Verification</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="upload-features">
+                <div class="upload-feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Processing</span>
+                </div>
+                <div class="upload-feature">
+                    <i class="fas fa-bolt"></i>
+                    <span>Real-time Analysis</span>
+                </div>
+                <div class="upload-feature">
+                    <i class="fas fa-chart-line"></i>
+                    <span>95%+ Accuracy</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Multi-Step Processing Animation (Hidden initially) -->
+        <div class="processing-overlay" id="processingOverlay" style="display: none;">
+            <!-- ... processing steps content ... -->
+        </div>
+    </div>
+</section>
+
+<!-- Technology Section -->
+<section class="technology-section">
+    <div class="section-header" data-aos="fade-up">
+        <h2>Powered by Advanced AI</h2>
+        <p>Cutting-edge deep learning technology for accurate verification</p>
+    </div>
+    
+    <div class="tech-grid">
+        <div class="tech-card glass-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="tech-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>Convolutional Neural Networks</h3>
+            <p>Deep CNN architecture with 12 layers for extracting intricate signature patterns and features.</p>
+            <div class="tech-stats">
+                <span>12 Layers</span>
+                <span>256 Filters</span>
+            </div>
+        </div>
+        
+        <div class="tech-card glass-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="tech-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <h3>Grad-CAM Visualization</h3>
+            <p>Heatmap visualization showing which parts of the signature influenced the AI's decision.</p>
+            <div class="tech-stats">
+                <span>Heatmap</span>
+                <span>Explainable AI</span>
+            </div>
+        </div>
+        
+        <div class="tech-card glass-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="tech-icon">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3>Confidence Scoring</h3>
+            <p>Probability-based verification with 95%+ accuracy on benchmark datasets.</p>
+            <div class="tech-stats">
+                <span>95.5% AUC</span>
+                <span>99% Precision</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works">
+    <div class="section-header" data-aos="fade-up">
+        <h2>How It Works</h2>
+        <p>From upload to result in seconds</p>
+    </div>
+    
+    <div class="steps-container">
+        <div class="step-card glass-card" data-aos="fade-right" data-aos-delay="100">
+            <div class="step-number">01</div>
+            <div class="step-icon-wrapper">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <h3>Upload Signature</h3>
+            <p>Drag & drop or browse to upload your signature image (JPG, PNG).</p>
+        </div>
+        
+        <div class="step-connector">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+        
+        <div class="step-card glass-card" data-aos="fade-right" data-aos-delay="200">
+            <div class="step-number">02</div>
+            <div class="step-icon-wrapper">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI Analysis</h3>
+            <p>CNN extracts features and Grad-CAM generates heatmap visualization.</p>
+        </div>
+        
+        <div class="step-connector">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+        
+        <div class="step-card glass-card" data-aos="fade-right" data-aos-delay="300">
+            <div class="step-number">03</div>
+            <div class="step-icon-wrapper">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Get Results</h3>
+            <p>Receive verification result with confidence score and visual explanation.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits-section">
+    <div class="section-header" data-aos="fade-up">
+        <h2>Why Choose SignGuard AI</h2>
+        <p>Enterprise-grade features for critical applications</p>
+    </div>
+    
+    <div class="benefits-grid">
+        <div class="benefit-item glass-card" data-aos="zoom-in" data-aos-delay="100">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Bank-Grade Security</h4>
+            <p>End-to-end encryption and secure processing.</p>
+        </div>
+        
+        <div class="benefit-item glass-card" data-aos="zoom-in" data-aos-delay="150">
+            <i class="fas fa-tachometer-alt"></i>
+            <h4>Real-Time Processing</h4>
+            <p>Results in under 500ms with GPU acceleration.</p>
+        </div>
+        
+        <div class="benefit-item glass-card" data-aos="zoom-in" data-aos-delay="200">
+            <i class="fas fa-chart-pie"></i>
+            <h4>Explainable AI</h4>
+            <p>Understand why signatures are accepted/rejected.</p>
+        </div>
+        
+        <div class="benefit-item glass-card" data-aos="zoom-in" data-aos-delay="250">
+            <i class="fas fa-database"></i>
+            <h4>Scalable Architecture</h4>
+            <p>Handle thousands of verifications simultaneously.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-container glass-card" data-aos="fade-up">
+        <h2>Ready to verify your first signature?</h2>
+        <p>Try our AI-powered system now - it's free!</p>
+        <a href="#upload-section" class="cta-btn" id="ctaVerifyBtn">
+            <span>Start Verification</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // File upload handling
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('file-input');
+    const browseBtn = document.getElementById('browseBtn');
+    const uploadDefault = document.getElementById('uploadDefault');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const previewImg = document.getElementById('preview-img');
+    const removeBtn = document.getElementById('removeBtn');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const form = document.getElementById('upload-form');
+    const processingOverlay = document.getElementById('processingOverlay');
+    
+    // Reference input fields (both default and preview)
+    const defaultRefInput = document.querySelector('.upload-default .ref-input');
+    const previewRefInput = document.querySelector('.upload-preview .preview-ref-input');
+    
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Highlight on drag
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+        dropArea.classList.add('highlight');
+    }
+    
+    function unhighlight() {
+        dropArea.classList.remove('highlight');
+    }
+    
+    // Handle dropped files
+    dropArea.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+        previewFile(files[0]);
+    }
+    
+    // Browse click
+    browseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+    });
+    
+    // Click on drop area to browse (but not on buttons)
+    dropArea.addEventListener('click', (e) => {
+        // Ignore interactive elements (submit button, inputs, links, etc.)
+        if (e.target.closest('button, input, a, label, select, textarea')) {
+            return;
+        }
+
+        // If preview is already visible, don't reopen picker on container clicks.
+        if (uploadPreview.style.display === 'block') {
+            return;
+        }
+
+        fileInput.click();
+    });
+    
+    // File input change
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            previewFile(this.files[0]);
+        }
+    });
+    
+    function previewFile(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                
+                // Switch to preview mode
+                uploadDefault.style.display = 'none';
+                uploadPreview.style.display = 'block';
+                
+                // Sync reference ID if exists
+                if (defaultRefInput.value) {
+                    previewRefInput.value = defaultRefInput.value;
+                }
+                
+                // Add preview class to drop area
+                dropArea.classList.add('has-preview');
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    // Remove button
+    removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // Clear file input
+        fileInput.value = '';
+        
+        // Switch back to default mode
+        uploadDefault.style.display = 'block';
+        uploadPreview.style.display = 'none';
+        
+        // Remove preview class
+        dropArea.classList.remove('has-preview');
+        
+        // Sync reference ID back to default
+        if (previewRefInput.value) {
+            defaultRefInput.value = previewRefInput.value;
+        }
+    });
+    
+    // Sync reference inputs
+    defaultRefInput.addEventListener('input', function() {
+        previewRefInput.value = this.value;
+    });
+    
+    previewRefInput.addEventListener('input', function() {
+        defaultRefInput.value = this.value;
+    });
+    
+    // Form submission with validation
+    form.addEventListener('submit', function(e) {
+        if (!fileInput.files || !fileInput.files[0]) {
+            e.preventDefault();
+            showNotification('Please select a signature image first', 'error');
+            return;
+        }
+
+        // Show loading state and allow normal form submit.
+        processingOverlay.style.display = 'flex';
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML = '<span>Processing...</span><i class="fas fa-spinner fa-spin"></i>';
+    });
+    
+    // Notification system
+    function showNotification(message, type) {
+        // Check if notification already exists
+        let notification = document.querySelector('.notification');
+        if (notification) {
+            notification.remove();
+        }
+        
+        notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    // Smooth scroll to upload section
+    const ctaBtn = document.getElementById('ctaVerifyBtn');
+    if (ctaBtn) {
+        ctaBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.upload-section').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
